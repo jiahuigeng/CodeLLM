@@ -3,6 +3,9 @@ import torch
 import openai
 from openai import OpenAI
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from api_resource import *
+
+
 
 
 # from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -57,25 +60,24 @@ def get_codemodel(model_name):
     return tokenizer, model
 
 def get_gpt_model():
-    # client = OpenAI(api_key=OPENAI_APT) 
-    return None
+    client = OpenAI(api_key=OPENAI_API) 
+    return client
 
-# def prompt_gpt(prompt):
+def prompt_gpt(client,prompt):
     
-#     # Make a request to GPT-4
-#     MODEL = "gpt-4o"
+    # Make a request to GPT-4
+    MODEL = "gpt-4o"
+    completion = client.chat.completions.create(
+        model=MODEL,
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ]
+    )
 
-#     completion = client.chat.completions.create(
-#         model=MODEL,
-#         messages=[
-#             {"role": "system", "content": "You are a helpful assistant."},
-#             {"role": "user", "content": prompt}
-#         ]
-#     )
-
-#     results = completion.choices[0].message.content
-#     print("Assistant: ", results)
-#     return results
+    results = completion.choices[0].message.content
+    print("Assistant: ", results)
+    return results
 
     
 if __name__ == "__main__":
